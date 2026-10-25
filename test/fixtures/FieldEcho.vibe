@@ -1,0 +1,9 @@
+<script setup lang="ts">
+import { useFieldContext } from '../../src/context.ts';
+
+const field = useFieldContext();
+</script>
+
+<template>
+  <p data-field>{{ field.name }}</p>
+</template>

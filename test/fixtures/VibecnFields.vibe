@@ -1,0 +1,29 @@
+<script setup lang="ts">
+import Input from '@vibecn/Input.vibe';
+import Textarea from '@vibecn/Textarea.vibe';
+import Checkbox from '@vibecn/Checkbox.vibe';
+import Switch from '@vibecn/Switch.vibe';
+import { useField } from '../../src/field.ts';
+import { useForm } from '../../src/form.ts';
+
+const form = useForm({
+  defaultValues: { email: '', bio: '', agree: false, notify: true },
+});
+const email = useField(form, 'email');
+const bio = useField(form, 'bio');
+const agree = useField(form, 'agree');
+const notify = useField(form, 'notify');
+</script>
+
+<template>
+  <div>
+  <Input id="vibe-email" v-model="email.value" @blur="email.handleBlur" />
+  <Textarea id="vibe-bio" v-model="bio.value" />
+  <Checkbox id="vibe-agree" v-model="agree.value" />
+  <Switch id="vibe-notify" v-model="notify.value" />
+  <p data-email>{{ email.value }}</p>
+  <p data-bio>{{ bio.value }}</p>
+  <p data-agree>{{ agree.value }}</p>
+  <p data-notify>{{ notify.value }}</p>
+  </div>
+</template>

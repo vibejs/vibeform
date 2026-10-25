@@ -1,0 +1,13 @@
+<script setup lang="ts">
+import { useField } from '../../src/field.ts';
+
+const email = useField({
+  name: 'email',
+  validators: { onBlur: ({ value }) => (value.includes('@') ? undefined : 'Enter an email') },
+});
+</script>
+
+<template>
+  <input id="email" name="email" v-model="email.value" @blur="email.handleBlur" :aria-invalid="email.invalid || undefined" aria-describedby="email-error" />
+  <p id="email-error">{{ email.error }}</p>
+</template>
