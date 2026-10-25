@@ -1,0 +1,10 @@
+@import "@fontsource-variable/geist";
+@import "tailwindcss";
+@import "../../../../vibecn/site/src/vibecn.css";
+
+@source '.';
+@source '../../../../vibecn/registry/ui';
+
+body {
+  margin: 0;
+}

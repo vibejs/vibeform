@@ -1,0 +1,25 @@
+<script setup lang="ts">
+import { useField, useForm } from '@usevibejs/form';
+
+const taken = new Set(['admin', 'root']);
+const form = useForm({ defaultValues: { username: '' } });
+const username = useField(form, 'username', {
+  validators: {
+    onChange: ({ value }) => (value.trim() ? undefined : 'Choose a username'),
+    onChangeAsyncDebounceMs: 300,
+    onChangeAsync: async ({ value }) => {
+      await new Promise((resolve) => setTimeout(resolve, 150));
+      return taken.has(value) ? 'That username is taken' : undefined;
+    },
+  },
+});
+</script>
+
+<template>
+  <form class="grid max-w-sm gap-3" data-example="username" @submit="form.submit">
+    <label for="username">Username</label>
+    <input id="username" name="username" v-model="username.value" @blur="username.handleBlur" :aria-invalid="username.invalid || undefined" aria-describedby="username-status" />
+    <p id="username-status" role="status">{{ username.isValidating ? 'Checking…' : username.error }}</p>
+    <button type="submit" :disabled="username.isValidating">Continue</button>
+  </form>
+</template>

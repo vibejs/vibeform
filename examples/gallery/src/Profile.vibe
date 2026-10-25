@@ -1,0 +1,31 @@
+<script setup lang="ts">
+import { ref } from '@usevibejs/ui';
+import { useField, useForm } from '@usevibejs/form';
+
+const saved = ref('');
+const form = useForm({
+  defaultValues: { name: 'Ada Lovelace', address: { city: 'London', line: '12 Analytical Engines' } },
+  onSubmit: ({ value }) => {
+    saved.value = `${value.name}, ${value.address.city}`;
+  },
+});
+const name = useField(form, 'name', {
+  validators: { onBlur: ({ value }) => (value.trim() ? undefined : 'Name is required') },
+});
+const city = useField(form, 'address.city');
+const line = useField(form, 'address.line');
+</script>
+
+<template>
+  <form class="grid max-w-sm gap-3" data-example="profile" @submit="form.submit">
+    <label for="profile-name">Name</label>
+    <input id="profile-name" name="name" v-model="name.value" @blur="name.handleBlur" :aria-invalid="name.invalid || undefined" />
+    <p role="alert">{{ name.error }}</p>
+    <label for="profile-line">Street</label>
+    <input id="profile-line" name="address.line" v-model="line.value" />
+    <label for="profile-city">City</label>
+    <input id="profile-city" name="address.city" v-model="city.value" />
+    <button type="submit">Save profile</button>
+    <p data-result>{{ saved }}</p>
+  </form>
+</template>

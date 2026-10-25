@@ -1,0 +1,48 @@
+<script setup lang="ts">
+import { ref, watch } from '@usevibejs/ui';
+import { useField, useForm } from '@usevibejs/form';
+import { syncFormValues } from '@usevibejs/form/query';
+
+interface Customer {
+  name: string;
+  email: string;
+}
+
+const record = ref<Customer | undefined>(undefined);
+const notice = ref('Waiting for the record');
+const form = useForm({
+  defaultValues: { name: '', email: '' },
+  onSubmit: ({ value }) => {
+    record.value = value;
+    notice.value = 'Saved';
+  },
+});
+const name = useField(form, 'name');
+const email = useField(form, 'email');
+
+watch(record, (value) => {
+  const applied = syncFormValues(form, value);
+  notice.value = applied ? 'Loaded the latest record' : 'Kept your unsaved edits';
+});
+
+function load(): void {
+  record.value = { name: 'Grace Hopper', email: 'grace@example.com' };
+}
+
+function refresh(): void {
+  record.value = { name: 'Grace Hopper', email: 'grace@navy.example' };
+}
+</script>
+
+<template>
+  <form class="grid max-w-sm gap-3" data-example="customer" @submit="form.submit">
+    <button type="button" @click="load">Load customer</button>
+    <label for="customer-name">Name</label>
+    <input id="customer-name" name="name" v-model="name.value" />
+    <label for="customer-email">Email</label>
+    <input id="customer-email" name="email" v-model="email.value" />
+    <button type="button" @click="refresh">Background refresh</button>
+    <button type="submit">Save</button>
+    <p role="status">{{ notice }}</p>
+  </form>
+</template>
