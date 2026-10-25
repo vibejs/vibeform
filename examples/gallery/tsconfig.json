@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "lib": ["es2022", "dom"],
+    "module": "preserve",
+    "moduleDetection": "force",
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "allowImportingTsExtensions": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["vite/client"],
+    "paths": {
+      "@vibecn/*": ["../../../vibecn/registry/ui/*"],
+      "__VIBECN_UTILS__": ["../../../vibecn/registry/lib/utils.ts"],
+      "__VIBECN_LIB__/*": ["../../../vibecn/registry/lib/*"]
+    }
+  },
+  "contentMappers": [{ "package": "@usevibejs/language-tools", "extensions": [".vibe"] }],
+  "include": ["src"]
+}

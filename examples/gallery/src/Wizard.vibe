@@ -1,0 +1,51 @@
+<script setup lang="ts">
+import { ref } from '@usevibejs/ui';
+import { useField, useForm } from '@usevibejs/form';
+
+const step = ref(0);
+const done = ref(false);
+const form = useForm({
+  defaultValues: { name: '', company: '', plan: 'pro' },
+  onSubmit: () => {
+    done.value = true;
+  },
+});
+const name = useField(form, 'name', {
+  validators: { onBlur: ({ value }) => (value.trim() ? undefined : 'Name is required') },
+});
+const company = useField(form, 'company');
+const plan = useField(form, 'plan');
+
+function next(): void {
+  if (step.value === 0 && !name.value.trim()) {
+    name.handleBlur();
+    return;
+  }
+  step.value += 1;
+}
+</script>
+
+<template>
+  <form class="grid max-w-sm gap-3" data-example="wizard" @submit="form.submit">
+    <p>Step {{ step + 1 }} of 3</p>
+    <div v-if="step === 0">
+      <label for="wizard-name">Name</label>
+      <input id="wizard-name" name="name" v-model="name.value" @blur="name.handleBlur" :aria-invalid="name.invalid || undefined" />
+      <p role="alert">{{ name.error }}</p>
+    </div>
+    <div v-else-if="step === 1">
+      <label for="wizard-company">Company</label>
+      <input id="wizard-company" name="company" v-model="company.value" />
+    </div>
+    <div v-else>
+      <label for="wizard-plan">Plan</label>
+      <select id="wizard-plan" name="plan" v-model="plan.value">
+        <option value="pro">Pro</option>
+        <option value="team">Team</option>
+      </select>
+    </div>
+    <button v-if="step < 2" type="button" @click="next">Next</button>
+    <button v-else type="submit">Finish</button>
+    <p v-if="done">Welcome, {{ name.value }}</p>
+  </form>
+</template>

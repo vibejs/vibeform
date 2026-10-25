@@ -1,0 +1,57 @@
+<script setup lang="ts">
+import { ref } from '@usevibejs/ui';
+import Customer from './Customer.vibe';
+import Invoice from './Invoice.vibe';
+import Login from './Login.vibe';
+import Profile from './Profile.vibe';
+import Register from './Register.vibe';
+import ServerForm from './ServerForm.vibe';
+import Settings from './Settings.vibe';
+import Username from './Username.vibe';
+import ValibotForm from './ValibotForm.vibe';
+import VibecnForm from './VibecnForm.vibe';
+import Wizard from './Wizard.vibe';
+import ZodForm from './ZodForm.vibe';
+
+const examples = [
+  ['login', 'Login'],
+  ['register', 'Register'],
+  ['profile', 'Profile'],
+  ['zod', 'Zod'],
+  ['valibot', 'Valibot'],
+  ['username', 'Username'],
+  ['invoice', 'Invoice'],
+  ['settings', 'Settings'],
+  ['wizard', 'Wizard'],
+  ['server', 'Server errors'],
+  ['customer', 'Customer'],
+  ['vibecn', 'Vibecn'],
+] as const;
+const current = ref<(typeof examples)[number][0]>('login');
+</script>
+
+<template>
+  <main class="mx-auto grid max-w-3xl gap-6 p-8">
+    <header>
+      <h1 class="text-2xl font-semibold">VibeForm</h1>
+      <p class="text-muted-foreground">Powerful, type-safe forms for Vibe.js.</p>
+    </header>
+    <label class="grid gap-1 text-sm" for="example">Example
+      <select id="example" v-model="current">
+        <option v-for="example in examples" :key="example[0]" :value="example[0]">{{ example[1] }}</option>
+      </select>
+    </label>
+    <Login v-if="current === 'login'" />
+    <Register v-else-if="current === 'register'" />
+    <Profile v-else-if="current === 'profile'" />
+    <ZodForm v-else-if="current === 'zod'" />
+    <ValibotForm v-else-if="current === 'valibot'" />
+    <Username v-else-if="current === 'username'" />
+    <Invoice v-else-if="current === 'invoice'" />
+    <Settings v-else-if="current === 'settings'" />
+    <Wizard v-else-if="current === 'wizard'" />
+    <ServerForm v-else-if="current === 'server'" />
+    <Customer v-else-if="current === 'customer'" />
+    <VibecnForm v-else />
+  </main>
+</template>

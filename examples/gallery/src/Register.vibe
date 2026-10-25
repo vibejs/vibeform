@@ -1,0 +1,41 @@
+<script setup lang="ts">
+import { ref } from '@usevibejs/ui';
+import { useField, useForm } from '@usevibejs/form';
+
+const result = ref('');
+const form = useForm({
+  defaultValues: { email: '', password: '', confirm: '' },
+  onSubmit: ({ value }) => {
+    result.value = value.email;
+  },
+});
+const email = useField(form, 'email', {
+  validators: { onBlur: ({ value }) => (value.includes('@') ? undefined : 'Enter an email') },
+});
+const password = useField(form, 'password', {
+  validators: { onChange: ({ value }) => (value.length >= 8 ? undefined : 'Use at least 8 characters') },
+});
+const confirm = useField(form, 'confirm', {
+  validators: {
+    onChangeListenTo: ['password'],
+    onChange: ({ value }) =>
+      value === form.getFieldValue('password') ? undefined : 'Passwords must match',
+  },
+});
+</script>
+
+<template>
+  <form class="grid max-w-sm gap-3" data-example="register" @submit="form.submit">
+    <label for="register-email">Email</label>
+    <input id="register-email" name="email" type="email" v-model="email.value" @blur="email.handleBlur" :aria-invalid="email.invalid || undefined" />
+    <p role="alert">{{ email.error }}</p>
+    <label for="register-password">Password</label>
+    <input id="register-password" name="password" type="password" v-model="password.value" @blur="password.handleBlur" :aria-invalid="password.invalid || undefined" />
+    <p role="alert">{{ password.error }}</p>
+    <label for="register-confirm">Confirm password</label>
+    <input id="register-confirm" name="confirm" type="password" v-model="confirm.value" @blur="confirm.handleBlur" :aria-invalid="confirm.invalid || undefined" />
+    <p role="alert">{{ confirm.error }}</p>
+    <button type="submit">Create account</button>
+    <p data-result>{{ result }}</p>
+  </form>
+</template>

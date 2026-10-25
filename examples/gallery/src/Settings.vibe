@@ -1,0 +1,30 @@
+<script setup lang="ts">
+import { ref } from '@usevibejs/ui';
+import { useField, useForm } from '@usevibejs/form';
+
+const advanced = ref(false);
+const form = useForm({
+  defaultValues: { digest: false, webhook: '' },
+});
+const digest = useField(form, 'digest');
+const webhook = useField(form, 'webhook', {
+  validators: {
+    onBlur: ({ value }) => (advanced.value && !value.startsWith('https://') ? 'Use an https URL' : undefined),
+  },
+});
+
+function toggle(event: Event): void {
+  advanced.value = (event.target as HTMLInputElement).checked;
+}
+</script>
+
+<template>
+  <form class="grid max-w-sm gap-3" data-example="settings" @submit="form.submit">
+    <label><input type="checkbox" v-model="digest.value" /> Email a digest</label>
+    <label><input type="checkbox" @change="toggle" /> Show advanced settings</label>
+    <label v-if="advanced" for="webhook">Webhook</label>
+    <input v-if="advanced" id="webhook" name="webhook" v-model="webhook.value" @blur="webhook.handleBlur" :aria-invalid="webhook.invalid || undefined" />
+    <p role="alert">{{ webhook.error }}</p>
+    <p>Digest: {{ digest.value }}</p>
+  </form>
+</template>

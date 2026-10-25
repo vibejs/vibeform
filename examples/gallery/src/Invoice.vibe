@@ -1,0 +1,20 @@
+<script setup lang="ts">
+import { useFieldArray, useForm } from '@usevibejs/form';
+
+const form = useForm({
+  defaultValues: { lines: [{ description: 'Design', amount: 120 }] },
+});
+const lines = useFieldArray(form, 'lines');
+</script>
+
+<template>
+  <form class="grid max-w-lg gap-3" data-example="invoice" @submit="form.submit">
+    <div v-for="(line, index) in lines.items" :key="index" class="flex gap-2">
+      <input :name="`lines[${index}].description`" :value="line.description" @input="lines.replace(index, { ...line, description: ($event.target as HTMLInputElement).value })" />
+      <input type="number" :name="`lines[${index}].amount`" :value="line.amount" @input="lines.replace(index, { ...line, amount: Number(($event.target as HTMLInputElement).value) })" />
+      <button type="button" @click="lines.remove(index)">Remove</button>
+    </div>
+    <button type="button" @click="lines.push({ description: '', amount: 0 })">Add line</button>
+    <p>Total {{ lines.items.reduce((sum, line) => sum + line.amount, 0) }}</p>
+  </form>
+</template>

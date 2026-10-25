@@ -1,0 +1,59 @@
+<script setup lang="ts">
+import { useField, useForm } from '@usevibejs/form';
+import Checkbox from '@vibecn/Checkbox.vibe';
+import Input from '@vibecn/Input.vibe';
+import RadioGroup from '@vibecn/RadioGroup.vibe';
+import RadioGroupItem from '@vibecn/RadioGroupItem.vibe';
+import Select from '@vibecn/Select.vibe';
+import SelectContent from '@vibecn/SelectContent.vibe';
+import SelectItem from '@vibecn/SelectItem.vibe';
+import SelectTrigger from '@vibecn/SelectTrigger.vibe';
+import SelectValue from '@vibecn/SelectValue.vibe';
+import Slider from '@vibecn/Slider.vibe';
+import Switch from '@vibecn/Switch.vibe';
+import Textarea from '@vibecn/Textarea.vibe';
+
+const form = useForm({
+  defaultValues: {
+    name: '',
+    bio: '',
+    plan: 'pro',
+    role: 'member',
+    newsletter: false,
+    alerts: true,
+    seats: [4],
+  },
+});
+const name = useField(form, 'name');
+const bio = useField(form, 'bio');
+const plan = useField(form, 'plan');
+const role = useField(form, 'role');
+const newsletter = useField(form, 'newsletter');
+const alerts = useField(form, 'alerts');
+const seats = useField(form, 'seats');
+</script>
+
+<template>
+  <form class="grid max-w-md gap-4" data-example="vibecn" @submit="form.submit">
+    <label for="cn-name">Name</label>
+    <Input id="cn-name" v-model="name.value" @blur="name.handleBlur" />
+    <label for="cn-bio">Bio</label>
+    <Textarea id="cn-bio" v-model="bio.value" />
+    <Select v-model="plan.value">
+      <SelectTrigger aria-label="Plan"><SelectValue placeholder="Plan" /></SelectTrigger>
+      <SelectContent>
+        <SelectItem value="pro">Pro</SelectItem>
+        <SelectItem value="team">Team</SelectItem>
+      </SelectContent>
+    </Select>
+    <RadioGroup v-model="role.value" aria-label="Role">
+      <RadioGroupItem value="member" />
+      <RadioGroupItem value="admin" />
+    </RadioGroup>
+    <label class="flex items-center gap-2"><Checkbox v-model="newsletter.value" /> Newsletter</label>
+    <label class="flex items-center gap-2"><Switch v-model="alerts.value" /> Alerts</label>
+    <Slider v-model="seats.value" :min="1" :max="20" :labels="['Seats']" />
+    <p>{{ plan.value }} · {{ role.value }} · {{ seats.value[0] }} seats</p>
+    <button type="submit">Save</button>
+  </form>
+</template>
