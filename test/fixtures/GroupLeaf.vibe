@@ -1,0 +1,9 @@
+<script setup lang="ts">
+import { useFormGroup } from '../../src/group.ts';
+
+const group = useFormGroup({ name: 'city' });
+</script>
+
+<template>
+  <p data-group>{{ group.value }}</p>
+</template>

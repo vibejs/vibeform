@@ -1,0 +1,58 @@
+<script setup lang="ts">
+import { ref } from '@usevibejs/ui';
+import { useField } from '../../src/field.ts';
+import { useForm } from '../../src/form.ts';
+import { useFormGroup } from '../../src/group.ts';
+import EmailField from './EmailField.vibe';
+import GroupHost from './GroupHost.vibe';
+import { profileContext } from './profile-context.ts';
+import FieldEcho from './FieldEcho.vibe';
+import Seen from './Seen.vibe';
+
+const showNickname = ref(false);
+const form = useForm({
+  defaultValues: { email: '', nickname: '', agree: false, plan: 'pro', address: { city: '' } },
+  onSubmit: ({ value }) => value,
+});
+let fieldError = '';
+let groupError = '';
+try {
+  useField({ name: 'missing' });
+} catch (error) {
+  fieldError = error instanceof Error ? error.message : '';
+}
+try {
+  useFormGroup({ name: 'missing' });
+} catch (error) {
+  groupError = error instanceof Error ? error.message : '';
+}
+const nickname = useField(form, 'nickname');
+const agree = useField(form, 'agree');
+const plan = useField(form, 'plan');
+profileContext.provide({ id: 7 });
+
+function toggle(): void {
+  showNickname.value = !showNickname.value;
+}
+</script>
+
+<template>
+  <form @submit="form.submit">
+    <EmailField />
+    <GroupHost />
+    <p data-field-error>{{ fieldError }}</p>
+    <p data-group-error>{{ groupError }}</p>
+    <input v-if="showNickname" id="nickname" name="nickname" v-model="nickname.value" />
+    <input id="agree" type="checkbox" name="agree" v-model="agree.value" />
+    <select id="plan" name="plan" v-model="plan.value">
+      <option value="pro">Pro</option>
+      <option value="team">Team</option>
+    </select>
+    <button type="button" id="toggle" @click="toggle">Toggle</button>
+    <button type="submit" id="save" :disabled="form.isSubmitting">Save</button>
+    <p data-plan>{{ plan.value }}</p>
+    <p data-agree>{{ agree.value }}</p>
+    <FieldEcho />
+    <Seen />
+  </form>
+</template>

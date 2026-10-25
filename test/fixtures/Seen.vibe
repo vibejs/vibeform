@@ -1,0 +1,9 @@
+<script setup lang="ts">
+import { profileContext } from './profile-context.ts';
+
+const seen = profileContext.use();
+</script>
+
+<template>
+  <p data-seen>{{ seen.id }}</p>
+</template>

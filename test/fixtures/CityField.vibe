@@ -1,0 +1,9 @@
+<script setup lang="ts">
+import { useField } from '../../src/field.ts';
+
+const city = useField({ name: 'city' });
+</script>
+
+<template>
+  <input id="city" name="address.city" v-model="city.value" />
+</template>

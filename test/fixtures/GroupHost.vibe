@@ -1,0 +1,14 @@
+<script setup lang="ts">
+import { useFormContext } from '../../src/context.ts';
+import { useFieldGroup } from '../../src/group.ts';
+import CityField from './CityField.vibe';
+import GroupLeaf from './GroupLeaf.vibe';
+
+const form = useFormContext();
+useFieldGroup(form, 'address');
+</script>
+
+<template>
+  <CityField />
+  <GroupLeaf />
+</template>
