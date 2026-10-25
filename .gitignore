@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+.tsbuild/
+*.tsbuildinfo
+*.tgz
+.playwright/
+benchmarks/latest.json
+test/.tmp/

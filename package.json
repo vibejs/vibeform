@@ -1,0 +1,86 @@
+{
+  "name": "@usevibejs/form",
+  "version": "0.1.0",
+  "description": "Powerful, type-safe forms for Vibe.js, powered by TanStack Form Core.",
+  "keywords": [
+    "form",
+    "headless",
+    "tanstack",
+    "typescript",
+    "validation",
+    "vibejs"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vibejs/vibeform.git"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "THIRD-PARTY-NOTICES.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./contract": {
+      "types": "./dist/contract.d.ts",
+      "import": "./dist/contract.js",
+      "default": "./dist/contract.js"
+    },
+    "./query": {
+      "types": "./dist/query.d.ts",
+      "import": "./dist/query.js",
+      "default": "./dist/query.js"
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit && pnpm --dir examples/gallery typecheck && node scripts/check-docs.ts",
+    "lint": "oxlint --deny-warnings",
+    "fmt": "oxfmt",
+    "test": "vitest run --project unit --project components",
+    "test:coverage": "vitest run --coverage --project unit --project components",
+    "test:integration": "pnpm build && pnpm --dir examples/gallery build && vitest run --project integration",
+    "check": "oxfmt --check && pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm test:integration",
+    "precheck": "pnpm build",
+    "bench": "node benchmarks/forms.ts",
+    "dev": "pnpm --dir examples/gallery dev"
+  },
+  "dependencies": {
+    "@tanstack/form-core": "catalog:",
+    "@tanstack/store": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@usevibejs/compiler": "catalog:",
+    "@usevibejs/language-tools": "catalog:",
+    "@usevibejs/ui": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "arktype": "catalog:",
+    "jsdom": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "playwright": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "valibot": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:",
+    "zod": "catalog:"
+  },
+  "peerDependencies": {
+    "@usevibejs/ui": "^0.1.0"
+  },
+  "engines": {
+    "node": "^24.15.0 || >=26"
+  },
+  "packageManager": "pnpm@12.14.0"
+}
