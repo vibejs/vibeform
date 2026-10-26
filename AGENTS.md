@@ -1,6 +1,6 @@
 # VibeForm
 
-Use public Vibe.js APIs and TanStack Form Core 1.33 APIs only. Keep the adapter headless.
+Use public vibe.js APIs and TanStack Form Core 1.33 APIs only. Keep the adapter headless.
 English only. Strict TypeScript. Relative TypeScript imports end in `.ts`.
 Run `pnpm check` and build examples before completion. Runtime source has 100% per-file coverage.
 Releases go through changesets and `.github/workflows/release.yml`. Add a changeset for every user-visible change.
