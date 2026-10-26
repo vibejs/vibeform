@@ -1,7 +1,7 @@
 {
   "name": "@usevibejs/form",
   "version": "0.1.0",
-  "description": "Powerful, type-safe forms for Vibe.js, powered by TanStack Form Core.",
+  "description": "Type-safe forms for vibe.js, powered by TanStack Form.",
   "keywords": [
     "form",
     "headless",

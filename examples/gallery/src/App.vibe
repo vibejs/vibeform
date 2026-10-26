@@ -34,7 +34,7 @@ const current = ref<(typeof examples)[number][0]>('login');
   <main class="mx-auto grid max-w-3xl gap-6 p-8">
     <header>
       <h1 class="text-2xl font-semibold">VibeForm</h1>
-      <p class="text-muted-foreground">Powerful, type-safe forms for Vibe.js.</p>
+      <p class="text-muted-foreground">Powerful, type-safe forms for vibe.js.</p>
     </header>
     <label class="grid gap-1 text-sm" for="example">Example
       <select id="example" v-model="current">

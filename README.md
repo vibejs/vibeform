@@ -1,8 +1,8 @@
 # VibeForm
 
-**Powerful, type-safe forms for Vibe.js.**
+**Type-safe forms for vibe.js, powered by TanStack Form.**
 
-VibeForm connects [TanStack Form Core](https://tanstack.com/form) 1.33 to the fine-grained reactivity of [Vibe.js](https://vibejs.org). Core owns form state, validation, arrays and submission. VibeForm owns field registration, `v-model` and cleanup. It does not depend on React, Vue or Solid.
+VibeForm connects [TanStack Form Core](https://tanstack.com/form) 1.33 to the fine-grained reactivity of [vibe.js](https://vibejs.org). Core owns form state, validation, arrays and submission. VibeForm owns field registration, `v-model` and cleanup. It does not depend on React, Vue or Solid.
 
 The package name is `@usevibejs/form`.
 
