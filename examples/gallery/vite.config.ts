@@ -3,7 +3,9 @@ import tailwindcss from "@tailwindcss/vite";
 import { vibe } from "@usevibejs/compiler/vite";
 import { defineConfig } from "vite";
 
-const registry = fileURLToPath(new URL("../../../vibecn/registry", import.meta.url));
+const registry = fileURLToPath(
+  new URL("./node_modules/@usevibejs/vibecn/registry", import.meta.url),
+);
 
 export default defineConfig({
   plugins: [vibe(), tailwindcss()],
