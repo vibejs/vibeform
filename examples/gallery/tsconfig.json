@@ -12,9 +12,9 @@
     "noEmit": true,
     "types": ["vite/client"],
     "paths": {
-      "@vibecn/*": ["../../../vibecn/registry/ui/*"],
-      "__VIBECN_UTILS__": ["../../../vibecn/registry/lib/utils.ts"],
-      "__VIBECN_LIB__/*": ["../../../vibecn/registry/lib/*"]
+      "@vibecn/*": ["./node_modules/@usevibejs/vibecn/registry/ui/*"],
+      "__VIBECN_UTILS__": ["./node_modules/@usevibejs/vibecn/registry/lib/utils.ts"],
+      "__VIBECN_LIB__/*": ["./node_modules/@usevibejs/vibecn/registry/lib/*"]
     }
   },
   "contentMappers": [{ "package": "@usevibejs/language-tools", "extensions": [".vibe"] }],

@@ -10,6 +10,10 @@
     "validation",
     "vibejs"
   ],
+  "homepage": "https://github.com/vibejs/vibeform#readme",
+  "bugs": {
+    "url": "https://github.com/vibejs/vibeform/issues"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -41,6 +45,9 @@
       "default": "./dist/query.js"
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc --noEmit && pnpm --dir examples/gallery typecheck && node scripts/check-docs.ts",
@@ -52,23 +59,28 @@
     "check": "oxfmt --check && pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm test:integration",
     "precheck": "pnpm build",
     "bench": "node benchmarks/forms.ts",
-    "dev": "pnpm --dir examples/gallery dev"
+    "dev": "pnpm --dir examples/gallery dev",
+    "version-packages": "changeset version && pnpm install --lockfile-only"
   },
   "dependencies": {
     "@tanstack/form-core": "catalog:",
     "@tanstack/store": "catalog:"
   },
   "devDependencies": {
+    "@changesets/cli": "catalog:",
     "@types/node": "catalog:",
     "@usevibejs/compiler": "catalog:",
     "@usevibejs/language-tools": "catalog:",
     "@usevibejs/ui": "catalog:",
+    "@usevibejs/vibecn": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "arktype": "catalog:",
+    "clsx": "catalog:",
     "jsdom": "catalog:",
     "oxfmt": "catalog:",
     "oxlint": "catalog:",
     "playwright": "catalog:",
+    "tailwind-merge": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:",
     "valibot": "catalog:",

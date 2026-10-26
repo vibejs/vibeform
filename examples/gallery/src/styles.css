@@ -1,9 +1,9 @@
 @import "@fontsource-variable/geist";
 @import "tailwindcss";
-@import "../../../../vibecn/site/src/vibecn.css";
+@import "../node_modules/@usevibejs/vibecn/registry/styles/theme.css";
 
 @source '.';
-@source '../../../../vibecn/registry/ui';
+@source '../node_modules/@usevibejs/vibecn/registry/ui';
 
 body {
   margin: 0;

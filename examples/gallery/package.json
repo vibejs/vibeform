@@ -12,6 +12,8 @@
     "@usevibejs/form": "workspace:*",
     "@usevibejs/ui": "catalog:",
     "arktype": "catalog:",
+    "clsx": "catalog:",
+    "tailwind-merge": "catalog:",
     "valibot": "catalog:",
     "zod": "catalog:"
   },
@@ -19,6 +21,7 @@
     "@tailwindcss/vite": "catalog:",
     "@usevibejs/compiler": "catalog:",
     "@usevibejs/language-tools": "catalog:",
+    "@usevibejs/vibecn": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:ts-next",
     "vite": "catalog:"
