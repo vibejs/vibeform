@@ -18,4 +18,4 @@ That copies `FormField`, `FormErrorSummary` and `lib/form.ts`, and reuses Field,
 
 ## Contract
 
-`@usevibejs/form/contract` accepts the structural shape of an `@usevibejs/contract` `ApiResult`. It does not import that package. `applyApiResult` writes field pointers and a form message, then returns the same result. It does not throw. Unknown error codes still produce a form message from `detail` or `title` when they carry no issues.
+`@usevibejs/form/contract` accepts the structural shape of an `@usevibejs/contract` `ApiResult`. It does not import that package. `applyServerErrors(form, problem)` writes a `problem+json` body onto TanStack fields. A field the form does not own is appended to the form message. `applyApiResult` writes field pointers and a form message, then returns the same result. It does not throw. Unknown error codes still produce a form message from `detail` or `title` when they carry no issues.

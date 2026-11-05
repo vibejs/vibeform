@@ -427,9 +427,60 @@ describe("server and query integration", () => {
     expect(ignored.fields).toEqual({});
     expect(ignored.form).toBe("Invalid");
     applyServerErrors(form, mapped);
-    expect(form.errorMap.onServer).toContain("Empty");
-    expect(form.fields.q).toMatchObject({ errorMap: { onServer: "Bad query" } });
+    expect(form.errorMap.onServer).toBe("Empty\nBad query");
+    expect(form.fields.q).toBeUndefined();
     expect(form.fields.email).toMatchObject({ errorMap: { onServer: ["Taken", "Taken again"] } });
+    const valued = {
+      errorMap: {} as { onServer?: string },
+      fields: {} as Record<string, unknown>,
+      setErrorMap(map: { onServer?: string }) {
+        this.errorMap = map;
+      },
+      setFieldMeta(
+        field: string,
+        updater: (previous: { errorMap?: Record<string, unknown> } | undefined) => {
+          errorMap?: Record<string, unknown>;
+        },
+      ) {
+        this.fields[field] = updater(
+          this.fields[field] as { errorMap?: Record<string, unknown> } | undefined,
+        );
+      },
+      state: {
+        fieldMeta: { nickname: {} },
+        values: { email: "", items: [{ sku: "a" }] as { sku: string }[], address: null },
+      },
+    };
+    applyServerErrors(valued, {
+      code: "VALIDATION_FAILED",
+      title: "Invalid",
+      status: 400,
+      errors: [
+        { in: "body", pointer: "/email", message: "Taken" },
+        { in: "body", pointer: "/items/0/sku", message: "Sold" },
+        { in: "body", pointer: "/nickname", message: "Reserved" },
+        { in: "body", pointer: "/missing", message: "Nope" },
+        { in: "body", pointer: "/address/city", message: "Required" },
+      ],
+    });
+    expect(valued.fields.email).toMatchObject({ errorMap: { onServer: "Taken" } });
+    expect(valued.fields["items[0].sku"]).toMatchObject({ errorMap: { onServer: "Sold" } });
+    expect(valued.fields.nickname).toMatchObject({ errorMap: { onServer: "Reserved" } });
+    expect(valued.errorMap.onServer).toBe("Nope\nRequired");
+    applyServerErrors(valued, { fields: { ".": ["Lost"], "": [""], missing: [""] } });
+    expect(valued.errorMap.onServer).toBe("Lost");
+    valued.state.values = null as unknown as typeof valued.state.values;
+    applyServerErrors(valued, {
+      fields: { nickname: ["Still known"], ghost: ["Gone"] },
+      form: "Form",
+    });
+    expect(valued.fields.nickname).toMatchObject({ errorMap: { onServer: "Still known" } });
+    expect(valued.errorMap.onServer).toBe("Form\nGone");
+    valued.state.values = 1 as unknown as typeof valued.state.values;
+    applyServerErrors(valued, { fields: { ghost: ["Away"] } });
+    expect(valued.errorMap.onServer).toBe("Away");
+    applyServerErrors(valued, { code: "NOT_FOUND", title: "Missing", status: 404 });
+    expect(valued.errorMap.onServer).toBe("Missing");
     const result = applyApiResult(form, {
       ok: false as const,
       error: { code: "BAD_REQUEST", title: "No", status: 400, detail: "Stopped" },
