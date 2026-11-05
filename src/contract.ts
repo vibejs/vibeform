@@ -23,7 +23,7 @@ export interface ServerForm {
   setErrorMap(errorMap: { onServer?: string }): void;
   /** `never` keeps Core's invariant field-path method assignable. */
   setFieldMeta(field: never, updater: (previous: never) => unknown): void;
-  state: { fieldMeta: object };
+  state: { fieldMeta: object; values?: unknown };
 }
 
 /** Converts an RFC 6901 pointer into a TanStack field path. `/items/0/sku` becomes `items[0].sku`. */
@@ -70,11 +70,47 @@ export function mapContractProblem(
   return { form: formMessages.length > 0 ? formMessages.join("\n") : undefined, fields };
 }
 
-/** Writes a server error map onto the form. Field messages use Core's `onServer` channel. */
-export function applyServerErrors<TForm>(form: TForm, errors: ServerFieldErrors): void {
+function isContractProblem(value: ServerFieldErrors | ContractProblem): value is ContractProblem {
+  return "code" in value && "title" in value && "status" in value && !("fields" in value);
+}
+
+/** A field the form already owns, either because it is mounted or because `values` has that path. */
+function fieldKnown(api: ServerForm, field: string): boolean {
+  if (Object.hasOwn(api.state.fieldMeta, field)) return true;
+  return pathExists(api.state.values, field);
+}
+
+function pathExists(values: unknown, field: string): boolean {
+  if (typeof values !== "object" || values === null) return false;
+  const parts = field.split(/\.|\[|\]/).filter((part) => part.length > 0);
+  if (parts.length === 0) return false;
+  let current: unknown = values;
+  for (const part of parts) {
+    if (typeof current !== "object" || current === null || !Object.hasOwn(current, part))
+      return false;
+    current = (current as Record<string, unknown>)[part];
+  }
+  return true;
+}
+
+/**
+ * Writes server errors onto the form.
+ * Pass a contract `problem+json` body or a prepared field map. Pointers that name a mounted
+ * field, or a path present on `values`, use that field's `onServer` channel. Every other
+ * field message is appended to the form message.
+ */
+export function applyServerErrors<TForm>(
+  form: TForm,
+  input: ServerFieldErrors | ContractProblem,
+): void {
   const api = asServerForm(form);
-  if (errors.form !== undefined) api.setErrorMap({ onServer: errors.form });
+  const errors = isContractProblem(input) ? mapContractProblem(input) : input;
+  const unknown: string[] = [];
   for (const [field, messages] of Object.entries(errors.fields)) {
+    if (!fieldKnown(api, field)) {
+      for (const message of messages) if (message) unknown.push(message);
+      continue;
+    }
     const value = messages.length === 1 ? messages[0] : messages;
     api.setFieldMeta(
       field as never,
@@ -84,6 +120,8 @@ export function applyServerErrors<TForm>(form: TForm, errors: ServerFieldErrors)
       })) as never,
     );
   }
+  const lines = [errors.form, ...unknown].filter((line): line is string => !!line);
+  if (lines.length > 0) api.setErrorMap({ onServer: lines.join("\n") });
 }
 
 /** Clears `onServer` from the form and from the listed fields, or from every known field. */

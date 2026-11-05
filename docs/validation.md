@@ -45,13 +45,22 @@ A failed schema does not replace `form.values` with the parsed output. `onSubmit
 
 `email.messages` is the list of strings taken from string errors and Standard Schema issues. `email.error` is the first message. `form.errors` holds form-level errors. `formErrorMessages` reads a root Standard Schema message from `{ form: { '': ... } }`.
 
-Server errors use the `onServer` channel. Map them explicitly. A problem with no field list becomes one form message.
+Server errors use the `onServer` channel. `applyServerErrors(form, problem)` reads a contract `problem+json` body. A pointer that names a mounted field, or a path on the form values, is written to that field. Every other field message is appended to the form message. A problem with no field list becomes one form message.
 
 ```ts
 import { useForm } from "@usevibejs/form";
-import { applyApiResult } from "@usevibejs/form/contract";
+import { applyApiResult, applyServerErrors } from "@usevibejs/form/contract";
 
 const form = useForm({ defaultValues: { email: "" } });
+applyServerErrors(form, {
+  code: "VALIDATION_FAILED",
+  title: "Invalid",
+  status: 400,
+  errors: [
+    { in: "body", pointer: "/email", message: "Taken" },
+    { in: "body", pointer: "/nickname", message: "Unknown field" },
+  ],
+});
 applyApiResult(form, {
   ok: false,
   error: {
@@ -63,4 +72,4 @@ applyApiResult(form, {
 });
 ```
 
-`pointerToField('/items/0/sku')` is `items[0].sku`. Issues outside the included request parts (`body` by default) stay on the form.
+`pointerToField('/items/0/sku')` is `items[0].sku`. Issues outside the included request parts (`body` by default) stay on the form. `applyApiResult` accepts `include` when another request part should become a field error.
